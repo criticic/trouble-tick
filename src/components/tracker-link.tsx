@@ -30,16 +30,7 @@ const TrackerLinkActions = ({
     };
 
     const getHtmlCode = () => {
-        return `
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Image</title>
-    </head>
-    <body>
-        <img src="${fullUrl}" alt="Image" width="1" height="1" style="display:block" title="Image" />
-    </body>
-</html>`;
+        return `<img src="${fullUrl}" alt="Image" width="1" height="1" style="display:block" title="Image" />`;
     };
 
     return (
