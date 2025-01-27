@@ -22,3 +22,10 @@ TailwindCSS & shadcn/ui for the styling.
 - Create short links
 - Create email tracking links
 - Track when and where the links are clicked
+
+## Todo
+
+- GeoIP (have to find a free service)
+- etc
+
+Note: to embed the tracking pixel in an email, you can use an extension like [Insert and Send HTML with Gmail](https://chromewebstore.google.com/detail/insert-and-send-html-with/bcflbfdlpegakpncdgmejelcolhmfkjh?hl=en) if your mail client does not support embedding HTML.
