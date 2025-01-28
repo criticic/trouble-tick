@@ -1,5 +1,9 @@
 import type { Config } from 'drizzle-kit';
 
+import loadEnvironment from './getEnv';
+
+loadEnvironment();
+
 export default {
     schema: './src/lib/db/schema.ts',
     out: './src/lib/db/migrations',

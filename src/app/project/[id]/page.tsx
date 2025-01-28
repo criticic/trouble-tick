@@ -15,7 +15,6 @@ import {
 import { auth } from '@/lib/auth';
 import { db } from '@/lib/db';
 import { events, projects, trackers } from '@/lib/db/schema';
-import { getLocation } from '@/lib/geoip';
 import { format, startOfHour, subHours } from 'date-fns';
 import { fromZonedTime } from 'date-fns-tz';
 import { desc, eq, inArray } from 'drizzle-orm';
@@ -53,8 +52,8 @@ export default async function ProjectPage({
                 trackersList.map((t) => t.id),
             ),
         )
-        .limit(100)
-        .orderBy(desc(events.timestamp));
+        .orderBy(desc(events.timestamp))
+        .limit(100);
 
     const groupedTrackers = groupBy(trackersList, 'type');
 
@@ -198,14 +197,14 @@ export default async function ProjectPage({
                                             {format(
                                                 fromZonedTime(
                                                     event.timestamp,
-                                                    'UTC',
+                                                    'IST'
                                                 ),
                                                 'MMM dd, yyyy h:mm a',
                                             )}
                                         </TableCell>
                                         <TableCell>{event.ip}</TableCell>
                                         <TableCell>
-                                            {await getLocation(event.ip)}
+                                            {event.city + ', ' + event.country}
                                         </TableCell>
                                         <TableCell className='max-w-[300px] truncate'>
                                             {event.userAgent}

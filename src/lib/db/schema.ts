@@ -44,6 +44,10 @@ export const events = sqliteTable('events', {
         .notNull()
         .references(() => trackers.id, { onDelete: 'cascade' }),
     ip: text('ip').notNull(),
+    country: text('country'),
+    city: text('city'),
+    latitude: text('latitude'),
+    longitude: text('longitude'),
     userAgent: text('userAgent').notNull(),
     referrer: text('referrer').notNull(),
     timestamp: integer('timestamp', { mode: 'timestamp_ms' })

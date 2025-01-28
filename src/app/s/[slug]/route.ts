@@ -1,5 +1,6 @@
 import { db } from '@/lib/db';
 import { events, trackers } from '@/lib/db/schema';
+import { geolocation } from '@vercel/functions';
 import { eq } from 'drizzle-orm';
 import { headers } from 'next/headers';
 
@@ -9,6 +10,7 @@ export async function GET(
 ) {
     const headersList = await headers();
     const slug = (await params).slug;
+    const { country, city, latitude, longitude } = geolocation(req);
 
     const tracker = await db
         .select()
@@ -24,6 +26,10 @@ export async function GET(
         ip: headersList.get('x-forwarded-for')!,
         userAgent: headersList.get('user-agent')!,
         referrer: headersList.get('referer')!,
+        country: country,
+        city: city,
+        latitude: latitude,
+        longitude: longitude,
     });
 
     console.log(event);
