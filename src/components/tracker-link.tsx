@@ -15,8 +15,8 @@ const TrackerLinkActions = ({
 }) => {
     const fullUrl = `${baseUrl}${
         tracker.type === 'pixel'
-            ? `/api/pixel/${tracker.slug}.png`
-            : `/api/s/${tracker.slug}`
+            ? `/pixel/${tracker.slug}.png`
+            : `/s/${tracker.slug}`
     }`;
 
     const { toast } = useToast();

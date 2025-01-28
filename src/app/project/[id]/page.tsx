@@ -14,13 +14,15 @@ import {
 import { auth } from '@/lib/auth';
 import { db } from '@/lib/db';
 import { events, projects, trackers } from '@/lib/db/schema';
-import { format } from 'date-fns';
+import { format, startOfHour, subHours } from 'date-fns';
 import { fromZonedTime } from 'date-fns-tz';
 import { desc, eq, inArray } from 'drizzle-orm';
 import { groupBy } from 'lodash';
 import { ChevronLeft } from 'lucide-react';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
+import { HitsChart } from '@/components/hits-chart';
+import { getLocation } from '@/lib/geoip';
 
 export default async function ProjectPage({
     params,
@@ -55,6 +57,19 @@ export default async function ProjectPage({
         .orderBy(desc(events.timestamp));
 
     const groupedTrackers = groupBy(trackersList, 'type');
+
+    // Process events data for the chart
+    const last24Hours = Array.from({ length: 24 }, (_, i) => {
+        const hour = subHours(new Date(), i);
+        return {
+            hour: format(hour, 'ha'),
+            count: eventsData.filter(
+                (event) =>
+                    startOfHour(fromZonedTime(event.timestamp, 'UTC')).getTime() ===
+                    startOfHour(hour).getTime(),
+            ).length,
+        };
+    }).reverse();
 
     return (
         <div className='flex min-h-screen flex-col'>
@@ -156,6 +171,8 @@ export default async function ProjectPage({
                             ))}
                         </CardContent>
                     </Card>
+
+                    <HitsChart data={last24Hours} />
                 </div>
 
                 <Card>
@@ -168,6 +185,7 @@ export default async function ProjectPage({
                                 <TableRow>
                                     <TableHead>Timestamp</TableHead>
                                     <TableHead>IP Address</TableHead>
+                                    <TableHead>Country</TableHead>
                                     <TableHead>User Agent</TableHead>
                                     <TableHead>Tracker</TableHead>
                                 </TableRow>
@@ -185,6 +203,9 @@ export default async function ProjectPage({
                                             )}
                                         </TableCell>
                                         <TableCell>{event.ip}</TableCell>
+                                        <TableCell>
+                                            {getLocation(event.ip)}
+                                        </TableCell>
                                         <TableCell className='max-w-[300px] truncate'>
                                             {event.userAgent}
                                         </TableCell>

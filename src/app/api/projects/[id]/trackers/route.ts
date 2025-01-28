@@ -18,11 +18,19 @@ export async function POST(
         return new Response('Not Found', { status: 404 });
     }
 
+    const projectName = project[0].name;
+    const sanitizedProjectName = projectName
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/-+/g, '-')
+        .replace(/^-|-$/g, '');
+    const modifiedSlug = `${sanitizedProjectName}-${slug}`;
+
     const newTracker = await db
         .insert(trackers)
         .values({
             type,
-            slug,
+            slug: modifiedSlug,
             targetUrl,
             projectId: id,
         })
