@@ -192,7 +192,7 @@ export default async function ProjectPage({
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
-                                {eventsData.map((event) => (
+                                {eventsData.map(async (event) => (
                                     <TableRow key={event.id}>
                                         <TableCell>
                                             {format(
@@ -205,7 +205,7 @@ export default async function ProjectPage({
                                         </TableCell>
                                         <TableCell>{event.ip}</TableCell>
                                         <TableCell>
-                                            {getLocation(event.ip)}
+                                            {await getLocation(event.ip)}
                                         </TableCell>
                                         <TableCell className='max-w-[300px] truncate'>
                                             {event.userAgent}
