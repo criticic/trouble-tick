@@ -18,6 +18,7 @@ import { Github, Menu, Moon, Sun } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { signIn, signOut } from 'next-auth/react';
 import { useTheme } from 'next-themes';
+import Image from 'next/image';
 import Link from 'next/link';
 
 export function Navbar() {
@@ -73,6 +74,18 @@ export function Navbar() {
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                             <Button variant='outline' size='sm'>
+                                <Image
+                                    src={
+                                        session.user?.image ||
+                                        'https://ui-avatars.com/api/?name=' +
+                                            session.user?.name +
+                                            '&background=random'
+                                    }
+                                    className='h-6 w-6 rounded-full'
+                                    width={20}
+                                    height={20}
+                                    alt={session.user?.name || 'Account'}
+                                />
                                 {session.user?.name || 'Account'}
                             </Button>
                         </DropdownMenuTrigger>
