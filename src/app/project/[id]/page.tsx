@@ -186,7 +186,7 @@ export default async function ProjectPage({
                                 <TableRow>
                                     <TableHead>Timestamp</TableHead>
                                     <TableHead>IP Address</TableHead>
-                                    <TableHead>Country</TableHead>
+                                    <TableHead>Location</TableHead>
                                     <TableHead>User Agent</TableHead>
                                     <TableHead>Tracker</TableHead>
                                 </TableRow>
@@ -201,7 +201,16 @@ export default async function ProjectPage({
                                         </TableCell>
                                         <TableCell>{event.ip}</TableCell>
                                         <TableCell>
-                                            {event.city + ', ' + event.country}
+                                            <a
+                                                href={`https://www.google.com/maps/search/?api=1&query=${event.latitude},${event.longitude}`}
+                                                target='_blank'
+                                                rel='noreferrer'
+                                                className='underline'
+                                            >
+                                                {event.city +
+                                                    ', ' +
+                                                    event.country}
+                                            </a>
                                         </TableCell>
                                         <TableCell className='max-w-[300px] truncate'>
                                             {event.userAgent}
