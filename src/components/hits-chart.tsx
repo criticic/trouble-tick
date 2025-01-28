@@ -7,6 +7,8 @@ import {
     ChartTooltip,
     ChartTooltipContent,
 } from '@/components/ui/chart';
+import { Event } from '@/lib/db/schema';
+import { format, startOfHour, subHours } from 'date-fns';
 import {
     Bar,
     BarChart,
@@ -16,10 +18,6 @@ import {
     YAxis,
 } from 'recharts';
 
-interface HitsChartProps {
-    data: { hour: string; count: number }[];
-}
-
 const chartConfig = {
     count: {
         label: 'Hits',
@@ -27,7 +25,25 @@ const chartConfig = {
     },
 } satisfies ChartConfig;
 
-export function HitsChart({ data }: HitsChartProps) {
+export function HitsChart({ data }: { data: Event[] }) {
+    const last24Hours = Array.from({ length: 24 }, (_, i) => {
+        const hour = subHours(new Date(), i);
+        return {
+            hour: format(hour, 'ha'),
+            count: data.filter(
+                (event: Event) =>
+                    startOfHour(
+                        // Workaround for timezone offset in development
+                        process.env.NODE_ENV === 'development'
+                            ? event.timestamp.getTime() -
+                                  event.timestamp.getTimezoneOffset() *
+                                      60 *
+                                      1000
+                            : event.timestamp,
+                    ).getTime() === startOfHour(hour).getTime(),
+            ).length,
+        };
+    }).reverse();
     return (
         <Card className='md:col-span-3'>
             <CardHeader>
@@ -36,7 +52,7 @@ export function HitsChart({ data }: HitsChartProps) {
             <CardContent className='h-[300px]'>
                 <ChartContainer config={chartConfig} className='w-full h-full'>
                     <ResponsiveContainer width='100%' height='100%'>
-                        <BarChart data={data}>
+                        <BarChart data={last24Hours}>
                             <CartesianGrid vertical={false} />
                             <XAxis
                                 dataKey='hour'

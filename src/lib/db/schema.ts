@@ -20,6 +20,8 @@ export const projects = sqliteTable('projects', {
         .notNull(),
 });
 
+export type Project = typeof projects.$inferSelect;
+
 export const trackers = sqliteTable('trackers', {
     id: text('id')
         .primaryKey()
@@ -35,6 +37,8 @@ export const trackers = sqliteTable('trackers', {
         .default(sql`(current_timestamp)`)
         .notNull(),
 });
+
+export type Tracker = typeof trackers.$inferSelect;
 
 export const events = sqliteTable('events', {
     id: text('id')
@@ -55,6 +59,8 @@ export const events = sqliteTable('events', {
         .notNull(),
 });
 
+export type Event = typeof events.$inferSelect;
+
 // NextAuth tables
 export const users = sqliteTable('user', {
     id: text('id')
@@ -65,6 +71,8 @@ export const users = sqliteTable('user', {
     emailVerified: integer('emailVerified', { mode: 'timestamp_ms' }),
     image: text('image'),
 });
+
+export type User = typeof users.$inferSelect;
 
 export const accounts = sqliteTable(
     'account',
