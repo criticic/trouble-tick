@@ -12,6 +12,7 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
+import UserTime from '@/components/usertime';
 import { auth } from '@/lib/auth';
 import { db } from '@/lib/db';
 import { events, projects, trackers } from '@/lib/db/schema';
@@ -194,13 +195,9 @@ export default async function ProjectPage({
                                 {eventsData.map(async (event) => (
                                     <TableRow key={event.id}>
                                         <TableCell>
-                                            {format(
-                                                fromZonedTime(
-                                                    event.timestamp,
-                                                    'IST'
-                                                ),
-                                                'MMM dd, yyyy h:mm a',
-                                            )}
+                                            <UserTime
+                                                timestamp={event.timestamp}
+                                            />
                                         </TableCell>
                                         <TableCell>{event.ip}</TableCell>
                                         <TableCell>

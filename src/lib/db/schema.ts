@@ -51,7 +51,7 @@ export const events = sqliteTable('events', {
     userAgent: text('userAgent').notNull(),
     referrer: text('referrer').notNull(),
     timestamp: integer('timestamp', { mode: 'timestamp_ms' })
-        .default(sql`(current_timestamp)`)
+        .default(sql`(datetime('now'))`)
         .notNull(),
 });
 
