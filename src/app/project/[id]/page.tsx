@@ -1,3 +1,4 @@
+import { HitsChart } from '@/components/hits-chart';
 import { Navbar } from '@/components/navbar';
 import { NewTrackerDialog } from '@/components/new-tracker-dialog';
 import TrackerLinkActions from '@/components/tracker-link';
@@ -14,6 +15,7 @@ import {
 import { auth } from '@/lib/auth';
 import { db } from '@/lib/db';
 import { events, projects, trackers } from '@/lib/db/schema';
+import { getLocation } from '@/lib/geoip';
 import { format, startOfHour, subHours } from 'date-fns';
 import { fromZonedTime } from 'date-fns-tz';
 import { desc, eq, inArray } from 'drizzle-orm';
@@ -21,8 +23,6 @@ import { groupBy } from 'lodash';
 import { ChevronLeft } from 'lucide-react';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
-import { HitsChart } from '@/components/hits-chart';
-import { getLocation } from '@/lib/geoip';
 
 export default async function ProjectPage({
     params,
@@ -65,8 +65,9 @@ export default async function ProjectPage({
             hour: format(hour, 'ha'),
             count: eventsData.filter(
                 (event) =>
-                    startOfHour(fromZonedTime(event.timestamp, 'UTC')).getTime() ===
-                    startOfHour(hour).getTime(),
+                    startOfHour(
+                        fromZonedTime(event.timestamp, 'UTC'),
+                    ).getTime() === startOfHour(hour).getTime(),
             ).length,
         };
     }).reverse();
