@@ -14,7 +14,8 @@
         "db:clear": "rm ./src/lib/db/local.sqlite*",
         "db:clear-migrations": "rm -rf ./src/lib/db/migrations",
         "format": "prettier --check .",
-        "format:fix": "prettier --write ."
+        "format:fix": "prettier --write .",
+        "preload": "node -e \"import('geolite2-redist').then(geolite => geolite.downloadDbs())\""
     },
     "dependencies": {
         "@auth/drizzle-adapter": "^1.7.4",
